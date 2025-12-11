@@ -24,7 +24,7 @@ export default function CoreValues() {
 	return (
 		<section className="relative py-24 px-6 md:py-32">
 			{/* Background Deco */}
-			<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-900/20 blur-[100px] -z-10 rounded-full" />
+			{/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-900/20 blur-[100px] -z-10 rounded-full" /> */}
 
 			<div className="container mx-auto max-w-6xl">
 				<FadeIn className="text-center mb-16">

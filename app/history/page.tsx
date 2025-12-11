@@ -1,20 +1,48 @@
+"use client";
+
 import FadeIn from "@/components/ui/fade-in";
 import ProjectList from "@/components/history/project-list";
-import { MOCK_PROJECTS } from "@/data/projects";
+import { useEvents } from "@/hooks/use-events";
+import { Loader2 } from "lucide-react";
+import React, { useMemo } from "react";
+import { Project } from "@/types/project";
 
-// Filter for completed projects (History)
-// Logic: End date is before today
-function getCompletedProjects() {
-	const today = new Date().toISOString().split("T")[0];
-	return MOCK_PROJECTS.filter(
-		(project) =>
-			// If end_date exists and is strictly less than today
-			project.end_date && project.end_date < today
-	);
+interface ProjectsPageProps {
+	searchParams: Promise<{ category?: string }>;
 }
 
-export default function ProjectsPage() {
-	const completedProjects = getCompletedProjects();
+export default function ProjectsPage({ searchParams }: ProjectsPageProps) {
+	const { data, isLoading, error } = useEvents(200); // Fetch more for history
+	const { category } = React.use(searchParams);
+
+	const completedProjects = useMemo(() => {
+		if (!data?.items) return [];
+		const today = new Date().toISOString().split("T")[0];
+
+		return data.items
+			.filter((event) => {
+				// Logic: End date is before today
+				const endDate = event.project_date || event.end_date;
+				return endDate && endDate < today;
+			})
+			.map((event) => event as unknown as Project);
+	}, [data]);
+
+	if (isLoading) {
+		return (
+			<main className="min-h-screen bg-slate-950 flex items-center justify-center">
+				<Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+			</main>
+		);
+	}
+
+	if (error) {
+		return (
+			<main className="min-h-screen bg-slate-950 flex items-center justify-center text-red-400">
+				Failed to load history.
+			</main>
+		);
+	}
 
 	return (
 		<main className="min-h-screen bg-slate-950 pt-32 pb-24">
@@ -36,7 +64,10 @@ export default function ProjectsPage() {
 				</FadeIn>
 
 				{/* Project List */}
-				<ProjectList initialProjects={completedProjects} />
+				<ProjectList
+					initialProjects={completedProjects}
+					initialCategory={category}
+				/>
 			</div>
 		</main>
 	);

@@ -44,7 +44,7 @@ export default function EventCarousel({ projects }: EventCarouselProps) {
 	if (!projects || projects.length === 0) {
 		return (
 			<div className="w-full h-64 flex items-center justify-center text-slate-500">
-				No ongoing events at the moment.
+				현재 진행 중인 프로젝트가 없습니다.
 			</div>
 		);
 	}

@@ -22,9 +22,9 @@ export default function IntroTeaser() {
 					</p>
 					<Link
 						href="/about"
-						className="inline-block border-b-2 border-blue-500 pb-1 text-blue-500 hover:text-white hover:border-white transition-colors text-lg"
+						className="inline-block border-b-2 border-cyan-500 pb-1 text-cyan-500 hover:text-white hover:border-white transition-colors text-lg"
 					>
-						WAVE ON 스토리 보러가기 →
+						WAVE ON 소개 보러가기 →
 					</Link>
 				</FadeIn>
 			</div>

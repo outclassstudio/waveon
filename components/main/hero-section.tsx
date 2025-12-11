@@ -1,9 +1,10 @@
 import Link from "next/link";
 import FadeIn from "../ui/fade-in";
+import ScrollBtn from "./scroll-btn";
 
 export default function HeroSection() {
 	return (
-		<section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-slate-950 text-white">
+		<section className="relative h-screen w-full flex items-center justify-center md:overflow-hidden bg-slate-950 text-white">
 			{/* Background Graphic (Wave/Neon Mood) */}
 			<div className="absolute inset-0 z-0 opacity-40">
 				<div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900 via-slate-950 to-slate-950" />
@@ -31,9 +32,12 @@ export default function HeroSection() {
 					delay={0.4}
 					className="flex flex-col sm:flex-row gap-4 justify-center"
 				>
-					<button className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-all shadow-[0_0_20px_rgba(37,99,235,0.5)]">
+					<Link
+						href="/project"
+						className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-all shadow-[0_0_20px_rgba(37,99,235,0.5)]"
+					>
 						지금 진행 중인 프로젝트 보기
-					</button>
+					</Link>
 					<Link
 						href="/about"
 						className="px-8 py-4 border border-slate-600 hover:border-blue-400 hover:text-blue-400 text-slate-300 font-medium rounded-full transition-all"
@@ -42,6 +46,10 @@ export default function HeroSection() {
 					</Link>
 				</FadeIn>
 			</div>
+
+			<FadeIn delay={0.4} className="mt-12 flex justify-center">
+				<ScrollBtn />
+			</FadeIn>
 		</section>
 	);
 }

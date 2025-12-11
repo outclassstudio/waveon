@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ParsedProject } from "@/types/project";
+import { Project } from "@/types/project";
 import { ArrowUpRight } from "lucide-react";
 import { clsx } from "clsx";
 
 interface ProjectCardProps {
-	project: ParsedProject;
+	project: Project;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -18,10 +18,6 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function ProjectCard({ project }: ProjectCardProps) {
-	const imageUrl =
-		project.image_urls.poster_image ||
-		project.image_urls.event_photos?.[0] ||
-		"/placeholder.jpg";
 	const categoryColor =
 		CATEGORY_COLORS[project.project_category] || CATEGORY_COLORS["default"];
 
@@ -33,7 +29,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 			{/* Image Container */}
 			<div className="relative aspect-[4/3] md:aspect-[4/3] md:h-full md:w-64 shrink-0 overflow-hidden">
 				<Image
-					src={imageUrl}
+					src={project.poster_url}
 					alt={project.title}
 					fill
 					className="object-cover transition-transform duration-500 group-hover:scale-105"

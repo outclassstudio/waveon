@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Project, ParsedProject } from "@/types/project";
+import { Project } from "@/types/project";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
 
@@ -8,18 +8,10 @@ interface EventSlideProps {
 }
 
 export default function EventSlide({ project }: EventSlideProps) {
-	const parsedProject: ParsedProject = {
-		...project,
-		image_urls: JSON.parse(project.image_urls) as {
-			event_photos?: string[];
-			poster_image?: string;
-		},
-	};
-
 	const posterImage =
-		parsedProject.image_urls.poster_image ||
-		parsedProject.image_urls.event_photos?.[0] ||
-		"/placeholder.jpg";
+		project.image_urls && project.image_urls.length > 0
+			? project.image_urls[0]
+			: "/placeholder.jpg";
 
 	return (
 		<div className="relative h-[60vh] md:h-[70vh] w-full shrink-0 flex items-center justify-center overflow-hidden rounded-2xl group">

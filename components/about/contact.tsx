@@ -19,17 +19,10 @@ export default function Contact() {
 
 				<div className="flex flex-col sm:flex-row gap-4 justify-center">
 					<Link
-						href="mailto:contact@waveon.com" // 임시 메일 주소
-						className="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-200 transition-colors"
+						href="/contact"
+						className="px-20 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-all shadow-[0_0_20px_rgba(37,99,235,0.5)]"
 					>
-						이메일 보내기
-					</Link>
-					<Link
-						href="https://instagram.com"
-						target="_blank"
-						className="px-8 py-4 border border-slate-700 text-slate-300 font-medium rounded-full hover:border-white hover:text-white transition-all"
-					>
-						Instagram
+						문의하기
 					</Link>
 				</div>
 			</FadeIn>

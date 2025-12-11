@@ -1,4 +1,5 @@
-import { MOCK_PROJECTS } from "@/data/projects";
+"use client";
+
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,8 +12,11 @@ import {
 	Clock,
 	Link as LinkIcon,
 	Youtube,
+	Loader2,
 } from "lucide-react";
-import { ParsedProject } from "@/types/project";
+import { Project } from "@/types/project";
+import { useEvent } from "@/hooks/use-events";
+import { use, useEffect } from "react";
 
 interface PageProps {
 	params: Promise<{
@@ -20,33 +24,42 @@ interface PageProps {
 	}>;
 }
 
-export default async function ProjectDetailPage({ params }: PageProps) {
-	const { projectid } = await params;
+export default function ProjectDetailPage({ params }: PageProps) {
+	// Unwrap params using React.use()
+	const { projectid } = use(params);
+	const { data: rawProject, isLoading, error } = useEvent(projectid);
 
-	const rawProject = MOCK_PROJECTS.find((p) => p.uid === projectid);
+	if (isLoading) {
+		return (
+			<main className="min-h-screen bg-slate-950 flex items-center justify-center">
+				<Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+			</main>
+		);
+	}
 
-	if (!rawProject) {
+	if (error || !rawProject) {
+		if (error) {
+			return (
+				<main className="min-h-screen bg-slate-950 flex items-center justify-center text-red-500">
+					Error loading project.
+				</main>
+			);
+		}
 		notFound();
 	}
 
-	// Parse images
-	let images = {};
-	try {
-		images = JSON.parse(rawProject.image_urls);
-	} catch (e) {
-		console.error("Failed to parse images");
-	}
+	// Cast to Project if needed, or use APIEvent type.
+	// APIEvent has correct image_urls type (string[]).
+	// Let's assume APIEvent and Project are compatible enough or just use the data directly.
+	const project = rawProject as unknown as Project;
 
-	const project: ParsedProject = {
-		...rawProject,
-		image_urls: images,
-	};
-
-	const posterImage =
-		project.image_urls.poster_image ||
-		project.image_urls.event_photos?.[0] ||
-		"/placeholder.jpg";
-	const eventPhotos = project.image_urls.event_photos || [];
+	// Use the rest of images as gallery? Or strict logic from previous file?
+	// Previous logic: poster_image || event_photos[0].
+	// API returns array. Let's say index 0 is poster, others are gallery?
+	// Or just all are gallery?
+	// User request example response: "image_urls": ["url1", "url2", ...]
+	// Let's treat all as event photos.
+	const eventPhotos = project.image_urls || [];
 
 	return (
 		<main className="min-h-screen bg-slate-950 pt-32 pb-24">
@@ -64,7 +77,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 					<div className="grid md:grid-cols-2 gap-12 mb-16">
 						<div className="relative aspect-[3/4] md:aspect-auto md:h-[600px] rounded-2xl overflow-hidden shadow-2xl shadow-blue-900/10">
 							<Image
-								src={posterImage}
+								src={project.poster_url}
 								alt={project.title}
 								fill
 								className="object-cover"
@@ -84,7 +97,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 								<div className="flex items-center gap-3">
 									<Calendar className="w-5 h-5 text-blue-500" />
 									<span>
-										{project.start_date}{" "}
+										{project.start_date || project.project_date}{" "}
 										{project.end_date &&
 											project.end_date !== project.start_date &&
 											`~ ${project.end_date}`}
@@ -111,7 +124,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 											)}
 											{project.staff && (
 												<span className="text-slate-500 text-sm">
-													Staff: {project.staff}
+													Staff:{" "}
+													{Array.isArray(project.staff)
+														? project.staff.join(", ")
+														: project.staff}
 												</span>
 											)}
 										</div>

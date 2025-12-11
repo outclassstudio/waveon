@@ -17,7 +17,7 @@ export default function JoinSection() {
 						WAVE ON과 함께 새로운 파도를 만들 사람을 기다립니다.
 					</p>
 
-					<div className="flex flex-col md:flex-row gap-4 justify-center">
+					<div className="flex flex-col md:flex-row gap-4 justify-center *:cursor-pointer">
 						<button className="px-8 py-4 bg-white text-blue-900 font-bold rounded-xl hover:bg-slate-200 transition-colors">
 							아티스트로 참여하기
 						</button>

@@ -49,7 +49,7 @@ export default function WhatWeDo() {
 						href="/about"
 						className="text-sm text-slate-500 hover:text-blue-400 underline decoration-slate-700 hover:decoration-blue-400 underline-offset-4 transition-all"
 					>
-						→ WAVE가 하는 일 더 보기
+						→ WAVE ON에 대해 더 알아보기
 					</Link>
 				</div>
 			</div>

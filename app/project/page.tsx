@@ -1,21 +1,44 @@
+"use client";
+
 import FadeIn from "@/components/ui/fade-in";
 import EventCarousel from "@/components/project/event-carousel";
-import { MOCK_PROJECTS } from "@/data/projects";
-
-// Filter for ongoing/future events
-// Logic: End date is equal to or after today
-function getOngoingProjects() {
-	const today = new Date().toISOString().split("T")[0];
-	return MOCK_PROJECTS.filter(
-		(project) =>
-			// If end_date is missing, assume it's ongoing or check start_date
-			// For this logic, we strictly check if end_date >= today
-			project.end_date && project.end_date >= today
-	);
-}
+import { useEvents } from "@/hooks/use-events";
+import { Loader2 } from "lucide-react";
+import { useMemo } from "react";
+import { Project } from "@/types/project";
+import { APIEvent } from "@/types/api";
 
 export default function SchedulePage() {
-	const ongoingProjects = getOngoingProjects();
+	const { data, isLoading, error } = useEvents(100);
+
+	const ongoingProjects = useMemo(() => {
+		if (!data?.items) return [];
+		const today = new Date().toISOString().split("T")[0];
+		// Filter logical ongoing projects: end_date >= today
+		// Map APIEvent to Project
+		return data.items
+			.filter((event) => {
+				const endDate = event.project_date || event.end_date;
+				return endDate && endDate >= today;
+			})
+			.map((event) => event as unknown as Project); // Cast safely as types align mostly, verify if properties match strictly
+	}, [data]);
+
+	if (isLoading) {
+		return (
+			<main className="min-h-screen bg-slate-950 flex items-center justify-center">
+				<Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+			</main>
+		);
+	}
+
+	if (error) {
+		return (
+			<main className="min-h-screen bg-slate-950 flex items-center justify-center text-red-400">
+				Failed to load projects.
+			</main>
+		);
+	}
 
 	return (
 		<main className="min-h-screen bg-slate-950 pt-32 pb-24">

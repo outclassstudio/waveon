@@ -14,7 +14,7 @@ export default function Intro() {
 
 				{/* Abstract Wave Lines (SVG) */}
 				<svg
-					className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-full opacity-30"
+					className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-full opacity-30"
 					viewBox="0 0 100 100"
 					preserveAspectRatio="none"
 				>
