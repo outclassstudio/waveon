@@ -8,9 +8,11 @@ import { useMemo } from "react";
 import { Project } from "@/types/project";
 
 // Helper to safely get image
-function getPosterImage(imageUrls?: string[]): string {
-	if (!imageUrls || imageUrls.length === 0) return "";
-	return imageUrls[0];
+function getPosterImage(project: Project): string {
+	if (project.poster_url) return project.poster_url;
+	if (project.image_urls && project.image_urls.length > 0)
+		return project.image_urls[0];
+	return "";
 }
 
 export default function CurrentWaves() {
@@ -38,7 +40,7 @@ export default function CurrentWaves() {
 			className="py-24 bg-slate-950 text-white overflow-hidden"
 		>
 			<div className="max-w-5xl mx-auto px-6 w-full">
-				<FadeIn className="mb-12 flex justify-between items-end">
+				<FadeIn className="mb-8 md:mb-12 flex md:flex-row flex-col gap-2 justify-between items-end">
 					<div>
 						<span className="text-blue-500 font-bold tracking-widest text-sm mb-2 block">
 							ON AIR
@@ -49,7 +51,7 @@ export default function CurrentWaves() {
 					</div>
 					<Link
 						href="/project"
-						className="hidden md:flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+						className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
 					>
 						더보기 <ArrowRight size={18} />
 					</Link>
@@ -61,9 +63,9 @@ export default function CurrentWaves() {
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
 								{/* Image Section */}
 								<div className="h-[400px] md:h-[500px] rounded-2xl relative overflow-hidden bg-slate-800 shadow-2xl shadow-blue-900/20">
-									{getPosterImage(featuredProject.image_urls) ? (
+									{getPosterImage(featuredProject) ? (
 										<img
-											src={getPosterImage(featuredProject.image_urls)}
+											src={getPosterImage(featuredProject)}
 											alt={featuredProject.title}
 											className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
 										/>
@@ -82,11 +84,11 @@ export default function CurrentWaves() {
 									<h3 className="text-3xl md:text-5xl font-bold mb-6 group-hover:text-blue-400 transition-colors leading-tight">
 										{featuredProject.title}
 									</h3>
-									<p className="text-slate-400 mb-8 text-lg leading-relaxed line-clamp-3">
+									<p className="text-slate-400 mb-6 md:mb-8 text-lg leading-relaxed line-clamp-3">
 										{featuredProject.description}
 									</p>
 
-									<div className="space-y-4 mb-10">
+									<div className="space-y-4 mb-6 md:mb-10">
 										<div className="flex items-center gap-3 text-lg text-slate-300">
 											<div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-blue-400">
 												<Calendar size={20} />
@@ -116,15 +118,6 @@ export default function CurrentWaves() {
 						현재 진행 중인 프로젝트가 없습니다.
 					</div>
 				)}
-
-				<div className="mt-8 md:hidden flex justify-center">
-					<Link
-						href="/project"
-						className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
-					>
-						더보기 <ArrowRight size={18} />
-					</Link>
-				</div>
 			</div>
 		</section>
 	);

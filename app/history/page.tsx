@@ -15,6 +15,8 @@ export default function ProjectsPage({ searchParams }: ProjectsPageProps) {
 	const { data, isLoading, error } = useEvents(200); // Fetch more for history
 	const { category } = React.use(searchParams);
 
+	console.log("project list", data?.items);
+
 	const completedProjects = useMemo(() => {
 		if (!data?.items) return [];
 		const today = new Date().toISOString().split("T")[0];
